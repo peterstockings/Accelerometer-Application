@@ -20,8 +20,6 @@
 
     <preference name="fullscreen" value="true" />
 
-    <feature>
-        <gap:plugin name="org.apache.cordova.device-motion" version="0.2.6" />
-    </feature>
+    <gap:plugin name="org.apache.cordova.device-motion" version="0.2.6" />
 
 </widget>
