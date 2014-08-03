@@ -1,16 +1,9 @@
-function onSuccess(acceleration) {
-    alert('Acceleration X: ' + acceleration.x + '\n' +
-        'Acceleration Y: ' + acceleration.y + '\n' +
-        'Acceleration Z: ' + acceleration.z + '\n' +
-        'Timestamp: ' + acceleration.timestamp + '\n');
-};
+var freqDiff = 100;
 
-function onError() {
-    alert('onError!');
-};
+function increaseFrequency() {
+    document.getElementById("frequencyInput").value = parseInt(document.getElementById("frequencyInput").value.slice(0, -2)) + freqDiff + "ms";
+}
 
-
-
-function setUpAccelerometer() {
-    navigator.accelerometer.getCurrentAcceleration(onSuccess, onError);
+function decreaseFrequency() {
+    document.getElementById("frequencyInput").value = parseInt(document.getElementById("frequencyInput").value.slice(0, -2)) - freqDiff + "ms";
 }

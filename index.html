@@ -3,9 +3,8 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Accelerometer Toolset</title>
+    <title>Fuel Tracker Sydney</title>
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui, width=device-width">
-    <meta name="msapplication-tap-highlight" content="no" />
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
@@ -18,32 +17,110 @@
     <link rel="stylesheet" href="css/buttons.css">
     <link rel="stylesheet" href="css/lists.css">
 
+    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.5.0/pure-min.css">
     <!-- TopCoat css-->
     <link rel="stylesheet" type="text/css" href="css/topcoat-mobile-light.css">
     <!-- Website script content -->
     <script src="script.js"></script>
-
+    <script src="js/smoothie.js"></script>
     <script src="js/ratchet.min.js"></script>
+    <script type="text/javascript">
+
+      // Randomly add a data point every 500ms
+      var random = new TimeSeries();
+      setInterval(function() {
+        random.append(new Date().getTime(), Math.random() * 10000);
+      }, 500);
+      
+      function createTimeline() {
+        var chart = new SmoothieChart();
+        chart.addTimeSeries(random, { strokeStyle: 'rgba(0, 255, 0, 1)', fillStyle: 'rgba(0, 255, 0, 0.2)', lineWidth: 4 });
+        chart.streamTo(document.getElementById("chart"), 500);
+      }
+    </script>
   </head>
   <body>
+    <body onload="createTimeline()">
     <header class="bar bar-nav">
       <a class="icon icon-gear pull-right" href="#composeModal"></a>
       <a href="#navPopover">
         <h1 class="title">
-          Accelerometer Tracker
+          <!--<span class="icon icon-home"></span> -->
+          Accelerometer Tracker Tool Box
+          <!--<span class="icon icon-caret"></span> -->
         </h1>
       </a>
     </header>
 
-    <div class="bar bar-standard bar-header-secondary">
-      <button class="btn btn-block" onclick="navigator.accelerometer.getCurrentAcceleration(onSuccess, onError)">Set up Accelerometer</button>
-    </div>
+    <div class="content">
 
+    <div class="card">
+      <ul class="table-view">
+        <li class="table-view-cell table-view-divider">Accelerometer Current Data </li>
+      </ul>
+    </div>
+    <table class="pure-table pure-table-bordered" align="center">
+    <thead>
+        <tr>
+            <th>X m/s<sup>2</sup></th>
+            <th>Y m/s<sup>2</sup></th>
+            <th>Z m/s<sup>2</sup></th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <tr>
+            <td id="xAxisCurrentValue">0</td>
+            <td id="yAxisCurrentValue">0</td>
+            <td id="zAxisCurrentValue">0</td>
+        </tr>
+    </tbody>
+    </table>
+    <div class="card">
+      <ul class="table-view">
+        <li class="table-view-cell table-view-divider">Accelerometer Saved Data </li>
+      </ul>
+    </div>
+    <button class="btn btn-block">Start Data aquisition</button>
+    <canvas id="chart" style="height:30%; width:100%;" ></canvas>
+    <table class="pure-table pure-table-bordered" align="center" id="resultsTable">
+      <thead>
+        <tr>
+            <th>Time s</th>
+            <th>X m/s<sup>2</sup></th>
+            <th>Y m/s<sup>2</sup></th>
+            <th>Z m/s<sup>2</sup></th>
+        </tr>
+      </thead>
+
+    <tbody>
+        <tr>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+        </tr>
+    </tbody>
+    </table>
+
+    <!-- Compose modal -->
     <div id="composeModal" class="modal">
       <header class="bar bar-nav">
         <a class="icon icon-left pull-left" href="#composeModal"></a>
         <h1 class="title">Settings</h1>
       </header>
+      <div class="content">
+      <div class="card">
+      <ul class="table-view">
+        <li class="table-view-cell table-view-divider">Scan Frequency</li>
+      </ul>
+    </div>
+    <span>
+      <button type="button" class="btn btn-default btn-lg" style="height:40px; width:15%" id="decreaseFreq" onclick="decreaseFrequency()">-</button>
+      <input type="text" value="1000ms" style="width: 68%;text-align: center;" id="frequencyInput"> </input>
+      <button type="button" class="btn btn-default btn-lg" style="height:40px; width:15%" id="increaseFreq" onclick="increaseFrequency()">+</button>
+    </span>
+
 
   </body>
 </html>
