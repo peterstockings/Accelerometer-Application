@@ -19,6 +19,7 @@
     <gap:splash src="splash.png" />
 
     <preference name="fullscreen" value="true" />
+    <access uri="*" subdomains="true" />
 
     <gap:plugin name="org.apache.cordova.device-motion" version="0.2.6" />
 
