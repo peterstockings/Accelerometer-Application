@@ -22,25 +22,13 @@
     <link rel="stylesheet" type="text/css" href="css/topcoat-mobile-light.css">
     <!-- Website script content -->
     <script src="script.js"></script>
-    <script src="js/smoothie.js"></script>
     <script src="js/ratchet.min.js"></script>
-    <script type="text/javascript">
-
-      // Randomly add a data point every 500ms
-      var random = new TimeSeries();
-      setInterval(function() {
-        random.append(new Date().getTime(), Math.random() * 10000);
-      }, 500);
-      
-      function createTimeline() {
-        var chart = new SmoothieChart();
-        chart.addTimeSeries(random, { strokeStyle: 'rgba(0, 255, 0, 1)', fillStyle: 'rgba(0, 255, 0, 0.2)', lineWidth: 4 });
-        chart.streamTo(document.getElementById("chart"), 500);
-      }
-    </script>
   </head>
   <body>
-    <body onload="createTimeline()">
+    <body onload="setInterval(function(){plotGraph({
+      'chartEl':'chart',
+      'data':generateTestData()
+    })},100);">
     <header class="bar bar-nav">
       <a class="icon icon-gear pull-right" href="#composeModal"></a>
       <a href="#navPopover">
@@ -59,7 +47,7 @@
         <li class="table-view-cell table-view-divider">Accelerometer Current Data </li>
       </ul>
     </div>
-    <table class="pure-table pure-table-bordered" align="center">
+    <table class="pure-table pure-table-bordered" align="center"  style="width:80%">
     <thead>
         <tr>
             <th>X m/s<sup>2</sup></th>
@@ -70,9 +58,9 @@
 
     <tbody>
         <tr>
-            <td id="xAxisCurrentValue">0</td>
-            <td id="yAxisCurrentValue">0</td>
-            <td id="zAxisCurrentValue">0</td>
+            <td id="xAxisCurrentValue" align="center">0</td>
+            <td id="yAxisCurrentValue" align="center">0</td>
+            <td id="zAxisCurrentValue" align="center">0</td>
         </tr>
     </tbody>
     </table>
@@ -81,28 +69,30 @@
         <li class="table-view-cell table-view-divider">Accelerometer Saved Data </li>
       </ul>
     </div>
-    <button class="btn btn-block">Start Data aquisition</button>
+    <button class="btn btn-block" onclick="addDataToTable(1, 1, 1, 1);">Start Data aquisition</button>
     <canvas id="chart" style="height:30%; width:100%;" ></canvas>
-    <table class="pure-table pure-table-bordered" align="center" id="resultsTable">
-      <thead>
-        <tr>
-            <th>Time s</th>
-            <th>X m/s<sup>2</sup></th>
-            <th>Y m/s<sup>2</sup></th>
-            <th>Z m/s<sup>2</sup></th>
-        </tr>
-      </thead>
+    <div style="overflow: auto; -webkit-overflow-scrolling: touch;">
+      <table class="pure-table pure-table-bordered" align="center"  style="width:80%" id="tableContainer" style="display:none;">
+        <thead>
+          <tr>
+              <th>Time s</th>
+              <th>X m/s<sup>2</sup></th>
+              <th>Y m/s<sup>2</sup></th>
+              <th>Z m/s<sup>2</sup></th>
+          </tr>
+        </thead>
 
-    <tbody>
-        <tr>
-            <td>0</td>
-            <td>0</td>
-            <td>0</td>
-            <td>0</td>
-        </tr>
-    </tbody>
-    </table>
-
+      <tbody id="resultsTable">
+          <tr>
+              <td align="center">0</td>
+              <td align="center">0</td>
+              <td align="center">0</td>
+              <td align="center">0</td>
+          </tr>
+      </tbody>
+      </table>
+    </div>
+    <button class="btn btn-block" onclick="">Save Data</button>
     <!-- Compose modal -->
     <div id="composeModal" class="modal">
       <header class="bar bar-nav">
@@ -120,6 +110,36 @@
       <input type="text" value="1000ms" style="width: 68%;text-align: center;" id="frequencyInput"> </input>
       <button type="button" class="btn btn-default btn-lg" style="height:40px; width:15%" id="increaseFreq" onclick="increaseFrequency()">+</button>
     </span>
+    <div class="card">
+      <ul class="table-view">
+        <li class="table-view-cell table-view-divider">Plot update</li>
+      </ul>
+    </div>
+    <span>
+      <button type="button" class="btn btn-default btn-lg" style="height:40px; width:15%" id="decreaseFreq" onclick="decreasePlotUpdate()">-</button>
+      <input type="text" value="1000ms" style="width: 68%;text-align: center;" id="plotUpdateInput"> </input>
+      <button type="button" class="btn btn-default btn-lg" style="height:40px; width:15%" id="increaseFreq" onclick="increasePlotUpdate()">+</button>
+    </span>
+     <div class="card">
+      <ul class="table-view">
+        <li class="table-view-cell table-view-divider">Data Points on Plot</li>
+      </ul>
+    </div>
+    <span>
+      <button type="button" class="btn btn-default btn-lg" style="height:40px; width:15%" id="decreaseDataPoints" onclick="decreaseDataPoints()">-</button>
+      <input type="text" value="100 points" style="width: 68%;text-align: center;" id="dataPointCount"> </input>
+      <button type="button" class="btn btn-default btn-lg" style="height:40px; width:15%" id="increaseDataPoints" onclick="increaseDataPoints()">+</button>
+    </span>
+     <div class="card">
+      <ul class="table-view">
+        <li class="table-view-cell table-view-divider">Email to Send Data To</li>
+      </ul>
+    </div>
+    <br>
+    <div class="input-row">
+    <label>Email</label>
+    <input type="email" placeholder="example@gmail.com">
+  </div>
 
 
   </body>
